@@ -1,12 +1,15 @@
+// src/constants/colors.ts
+
 export const Colors = {
   primary: '#1DB954', // Spotify green
-  secondary: '#191414', // Dark
   background: '#121212',
   surface: '#282828',
+  surfaceLight: '#404040',
   text: '#FFFFFF',
   textSecondary: '#B3B3B3',
-  accent: '#FF6B6B',
-  success: '#1DB954',
+  textTertiary: '#666666',
+  heart: '#FF6B6B',
+  flash: '#4ECDC4',
   warning: '#FFA726',
-  error: '#F44336',
+  purple: '#9C27B0',
 };

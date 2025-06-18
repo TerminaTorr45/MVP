@@ -1,36 +1,36 @@
+export type TabKey = 'nouvelles' | 'tendances' | 'genres' | 'concerts' | 'profil' | 'swipe';
+
+export interface Tab {
+  key: TabKey;
+  title: string;
+  icon: string;
+  emoji: string;
+}
+
 export interface Album {
   id: string;
   title: string;
-  artist: string | string[];
+  artist: string[];
   releaseDate: string;
   coverUrl: string;
   spotifyUrl: string;
-  youtubeUrl?: string;
   genre: string[];
   country: string[];
-  artistLocation?: {
-    city: string;
-    postalCode?: string;
-  };
-  popularity?: number;
+  isLiked?: boolean;
 }
 
-export interface Artist {
-  id: string;
-  name: string;
-  location?: {
-    city: string;
-    postalCode?: string;
-  };
+export interface UserStats {
+  totalAlbumsDiscovered: number;
+  totalAlbumsLiked: number;
+  favoriteGenres: string[];
+  sessionStartDate: string;
+  lastUsedDate: string;
+  totalSwipes: number;
 }
 
-export interface Concert {
-  id: string;
-  artistName: string;
-  title: string;
-  date: string;
-  venue: string;
-  city: string;
-  country: string;
-  ticketUrl: string;
+export interface AppSettings {
+  theme: 'dark' | 'light';
+  enableVibration: boolean;
+  enableSounds: boolean;
+  firstLaunch: boolean;
 }
