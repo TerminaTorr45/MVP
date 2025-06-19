@@ -1,4 +1,6 @@
-export type TabKey = 'nouvelles' | 'tendances' | 'genres' | 'concerts' | 'profil' | 'swipe';
+// src/types/index.ts
+
+export type TabKey = 'swipe' | 'artistes' | 'nouvelles' | 'profil';
 
 export interface Tab {
   key: TabKey;
@@ -11,12 +13,24 @@ export interface Album {
   id: string;
   title: string;
   artist: string[];
+  artistId?: string[];
   releaseDate: string;
   coverUrl: string;
   spotifyUrl: string;
+  youtubeUrl?: string;
   genre: string[];
   country: string[];
   isLiked?: boolean;
+}
+
+export interface Track {
+  id: string;
+  name: string;
+  trackNumber: number;
+  duration: number; // en millisecondes
+  previewUrl: string | null;
+  artists: string[];
+  explicit: boolean;
 }
 
 export interface UserStats {

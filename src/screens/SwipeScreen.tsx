@@ -307,6 +307,22 @@ export default function SwipeScreen({
     }
   };
 
+  const openYouTubeVideo = async () => {
+   const currentAlbum = swipeStack[currentAlbumIndex];
+   if (!currentAlbum || !currentAlbum.youtubeUrl) return;
+    
+   try {
+    const supported = await Linking.canOpenURL(currentAlbum.youtubeUrl);
+    if (supported) {
+      await Linking.openURL(currentAlbum.youtubeUrl);
+    } else {
+      Alert.alert('YouTube', 'Impossible d\'ouvrir YouTube. L\'application est-elle installée ?');
+    }
+    } catch (error) {
+     Alert.alert('Erreur', 'Impossible d\'ouvrir le lien YouTube');
+    }
+  };
+
   if (loading || swipeStack.length === 0) {
     return (
       <View style={styles.swipeContainer}>
@@ -431,16 +447,36 @@ export default function SwipeScreen({
                 </View>
 
                 <View style={styles.swipeAlbumInfo}>
-                  <Text style={styles.swipeAlbumTitle} numberOfLines={2}>
-                    {currentAlbum.title}
-                  </Text>
-                  <Text style={styles.swipeAlbumArtist} numberOfLines={1}>
-                    {currentAlbum.artist.join(', ')}
-                  </Text>
-                  <Text style={styles.swipeAlbumDate}>
-                    {formatReleaseDate(currentAlbum.releaseDate)}
-                  </Text>
-                </View>
+  <Text style={styles.swipeAlbumTitle} numberOfLines={2}>
+    {currentAlbum.title}
+  </Text>
+  <Text style={styles.swipeAlbumArtist} numberOfLines={1}>
+    {currentAlbum.artist.join(', ')}
+  </Text>
+  <View style={styles.albumMetaRow}>
+    <Text style={styles.swipeAlbumDate}>
+      {formatReleaseDate(currentAlbum.releaseDate)}
+    </Text>
+    <View style={styles.musicButtons}>
+      <TouchableOpacity 
+        style={[styles.musicBadge, styles.spotifyBadge]}
+        onPress={openCurrentAlbumInSpotify}
+      >
+        <Ionicons name="musical-notes" size={12} color="#1DB954" />
+        <Text style={styles.spotifyText}>Spotify</Text>
+      </TouchableOpacity>
+      {currentAlbum.youtubeUrl && (
+        <TouchableOpacity 
+          style={[styles.musicBadge, styles.youtubeBadge]}
+          onPress={openYouTubeVideo}
+        >
+          <Ionicons name="play" size={12} color="#FF0000" />
+          <Text style={styles.youtubeText}>YouTube</Text>
+        </TouchableOpacity>
+      )}
+    </View>
+  </View>
+</View>
               </TouchableOpacity>
             </Animated.View>
           </PanGestureHandler>
@@ -627,4 +663,39 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: Colors.text,
   },
+  albumMetaRow: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginTop: 8,
+},
+musicButtons: {
+  flexDirection: 'row',
+  gap: 8,
+},
+musicBadge: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  paddingHorizontal: 10,
+  paddingVertical: 4,
+  borderRadius: 12,
+},
+spotifyBadge: {
+  backgroundColor: Colors.surface,
+},
+youtubeBadge: {
+  backgroundColor: '#FFE5E5',
+},
+spotifyText: {
+  fontSize: 12,
+  fontWeight: '600',
+  color: Colors.primary,
+  marginLeft: 4,
+},
+youtubeText: {
+  fontSize: 12,
+  fontWeight: '600',
+  color: '#FF0000',
+  marginLeft: 4,
+},
 });

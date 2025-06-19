@@ -1,5 +1,4 @@
 // src/screens/NewReleasesScreen.tsx
-
 import React from 'react';
 import {
   View,
@@ -18,6 +17,7 @@ interface NewReleasesScreenProps {
   onToggleLike: (albumId: string) => void;
   onRefresh: () => void;
   refreshing: boolean;
+  onAlbumPress?: (album: Album) => void;
 }
 
 export default function NewReleasesScreen({
@@ -26,6 +26,7 @@ export default function NewReleasesScreen({
   onToggleLike,
   onRefresh,
   refreshing,
+  onAlbumPress, // AJOUT - récupération du prop
 }: NewReleasesScreenProps) {
   return (
     <ScrollView
@@ -45,13 +46,14 @@ export default function NewReleasesScreen({
           {albums.length > 0 ? `${albums.length} albums cette semaine` : 'Chargement...'}
         </Text>
       </View>
-
       <View style={styles.albumsContainer}>
         {albums.map(album => (
           <AlbumCard
             key={album.id}
             album={album}
             isLiked={likedAlbums.includes(album.id)}
+            onToggleLike={onToggleLike} // AJOUT - passage du prop
+            onPress={() => onAlbumPress?.(album)} // AJOUT - gestion du clic
           />
         ))}
       </View>

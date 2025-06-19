@@ -21,6 +21,7 @@ import TabNavigator from './src/navigation/TabNavigator';
 import SwipeScreen from './src/screens/SwipeScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import NewReleasesScreen from './src/screens/NewReleasesScreen';
+import AlbumDetailScreen from './src/screens/AlbumDetailScreen';
 
 // Types & Constants
 import { Album, UserStats, TabKey } from './src/types';
@@ -42,6 +43,7 @@ export default function App() {
     totalSwipes: 0
   });
   const [dataLoaded, setDataLoaded] = useState(false);
+  const [selectedAlbum, setSelectedAlbum] = useState<Album | null>(null);
 
   // Charger toutes les données au démarrage
   useEffect(() => {
@@ -157,6 +159,18 @@ export default function App() {
       );
     }
 
+    // Si un album est sélectionné, afficher ses détails
+    if (selectedAlbum) {
+      return (
+        <AlbumDetailScreen
+          album={selectedAlbum}
+          isLiked={likedAlbums.includes(selectedAlbum.id)}
+          onToggleLike={toggleLike}
+          onBack={() => setSelectedAlbum(null)}
+        />
+      );
+    }
+
     switch (activeTab) {
       case 'swipe':
         return (
@@ -180,6 +194,7 @@ export default function App() {
             onToggleLike={toggleLike}
             onRefresh={onRefresh}
             refreshing={refreshing}
+            onAlbumPress={setSelectedAlbum}
           />
         );
 
@@ -210,24 +225,28 @@ export default function App() {
     <GestureHandlerRootView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor={Colors.background} />
       
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>ALBUM</Text>
-        <Text style={styles.headerSubtitle}>
-          LIKE • {likedAlbums.length} ❤️ • {userStats.totalSwipes} swipes
-        </Text>
-      </View>
+      {/* Header - masqué si album sélectionné */}
+      {!selectedAlbum && (
+        <View style={styles.header}>
+          <Text style={styles.headerTitle}>ALBUM</Text>
+          <Text style={styles.headerSubtitle}>
+            LIKE • {likedAlbums.length} ❤️ • {userStats.totalSwipes} swipes
+          </Text>
+        </View>
+      )}
 
       {/* Content */}
       <View style={styles.contentContainer}>
         {renderContent()}
       </View>
 
-      {/* Bottom Navigation */}
-      <TabNavigator 
-        activeTab={activeTab} 
-        onTabPress={setActiveTab} 
-      />
+      {/* Bottom Navigation - masqué si album sélectionné */}
+      {!selectedAlbum && (
+        <TabNavigator 
+          activeTab={activeTab} 
+          onTabPress={setActiveTab} 
+        />
+      )}
     </GestureHandlerRootView>
   );
 }
